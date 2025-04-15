@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  api:
+    build: ./api
+    ports:
+      - "8000:8000"
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    volumes:
+      - /tmp:/tmp
+    depends_on:
+      - rabbitmq
+
+  worker:
+    build: ./worker
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    volumes:
+      - /tmp:/tmp
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    ports:
+      - "5672:5672"
+      - "15672:15672" # Management UI
